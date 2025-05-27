@@ -18,7 +18,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-
+import "./i18n";
 // core components
 import Admin from "layouts/Admin.js";
 import RTL from "layouts/RTL.js";

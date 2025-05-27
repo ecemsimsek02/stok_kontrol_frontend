@@ -85,13 +85,13 @@ const dashboardRoutes = [
   }, */
   {
     collapse: true,
-    name: "Accounts",
+    name: "Hesaplar",
     icon: "account_circle",
     state: "accountsCollapse",
     views: [
       {
         path: "/profile",
-        name: "Profile",
+        name: "Profil",
         mini: "P",
         component: ProfilePage,
         //icon: "account_circle",
@@ -100,7 +100,7 @@ const dashboardRoutes = [
       },
       {
         path: "/customers",
-        name: "Customers",
+        name: "Müşteriler",
         mini: "C",
         //icon: "account_circle",
         component: CustomersPage,
@@ -108,7 +108,7 @@ const dashboardRoutes = [
       },
       {
         path: "/vendors",
-        name: "Vendors",
+        name: "Satıcılar",
         mini: "V",
         component: VendorsPage,
         //icon: "account_circle",
@@ -118,13 +118,13 @@ const dashboardRoutes = [
   },
   {
     collapse: true,
-    name: "Cash",
+    name: "Kasa",
     icon: "account_balance_wallet", // İkonu değiştirebilirsin, uygun bir ikon seçtim.
     state: "cashCollapse",
     views: [
       {
         path: "/cashbox",
-        name: "Cashbox",
+        name: "Kasa Kayıtları",
         mini: "C",
         component: CashBoxPage, // Sayfanın bileşeni
         layout: "/admin",
@@ -132,7 +132,7 @@ const dashboardRoutes = [
       },
       {
         path: "/expense",
-        name: "Expense",
+        name: "Harcamalar",
         mini: "E",
         component: ExpensePage, // Sayfanın bileşeni
         layout: "/admin",
@@ -142,13 +142,13 @@ const dashboardRoutes = [
 
   {
     collapse: true,
-    name: "Store",
+    name: "Ürün Yönetimi",
     icon: "store",
     state: "storeCollapse",
     views: [
       {
         path: "/items",
-        name: "Item",
+        name: "Ürün",
         mini: "I",
         component: ItemsPage,
         //icon: "store",
@@ -156,7 +156,7 @@ const dashboardRoutes = [
       },
       {
         path: "/deliveries",
-        name: "Delivery",
+        name: "Teslimat",
         mini: "D",
         //icon: "store",
         component: DeliveriesPage,
@@ -167,27 +167,27 @@ const dashboardRoutes = [
 
   {
     collapse: true,
-    name: "Stocks",
+    name: "Stok",
     icon: "inventory", // Material Icons'tan bir stok simgesi
     state: "stocksCollapse",
     views: [
       {
         path: "/material",
-        name: "Material",
+        name: "Malzeme",
         mini: "M",
         component: MaterialPage,
         layout: "/admin",
       },
       {
         path: "/disinfectant",
-        name: "Disinfectant",
+        name: "Dezenfektan",
         mini: "D",
         component: DisinfectantPage,
         layout: "/admin",
       },
       {
         path: "/recipe",
-        name: "Recipe",
+        name: "Tarif",
         mini: "R",
         component: RecipePage,
         layout: "/admin",
@@ -196,21 +196,21 @@ const dashboardRoutes = [
   },
   {
     path: "/bills",
-    name: "Bills",
+    name: "Faturalar",
     icon: "receipt", // veya başka bir Material icon
     component: BillsPage, // bu sayfan varsa
     layout: "/admin",
   },
   {
     path: "/transactions",
-    name: "Transactions", // Başlık
+    name: "Alım-Satım İşlemleri", // Başlık
     icon: "shopping_cart", // Önerilen bir Material icon
     component: TransactionPage, // Yeni sayfa
     layout: "/admin", // Admin paneli içinde olacak
   },
   {
     path: "/invoices",
-    name: "Invoices",
+    name: "Siparişler",
     icon: "receipt", // veya başka bir Material icon
     component: InvoicesPage, // bu sayfan varsa
     layout: "/admin",

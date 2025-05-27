@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 import {
   Button,
@@ -16,7 +17,9 @@ import {
 import { Edit, Delete } from "@material-ui/icons";
 
 const InvoicesPage = () => {
+  const { t, i18n } = useTranslation();
   const [invoices, setInvoices] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [open, setOpen] = useState(false);
   const [editingInvoice, setEditingInvoice] = useState(null);
   const [formData, setFormData] = useState({
@@ -27,7 +30,6 @@ const InvoicesPage = () => {
     quantity: "",
     shipping: "",
   });
-
   const API_URL = "http://127.0.0.1:8000/invoice/api/invoices/";
 
   const getAuthHeaders = () => {
@@ -120,27 +122,74 @@ const InvoicesPage = () => {
     }
   };
 
+  const filteredInvoices = invoices.filter(
+    (invoice) =>
+      invoice.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      invoice.item.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      invoice.contact_number.includes(searchTerm)
+  );
+
   return (
     <div>
       <Typography variant="h4" gutterBottom>
-        Invoices
+        {t("Invoices")}
       </Typography>
+      <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+      <button onClick={() => i18n.changeLanguage("en")}>English</button>
+      <TextField
+        label={t("Search")}
+        variant="outlined"
+        fullWidth
+        style={{ marginBottom: "16px" }}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
       <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-        Add Invoice
+        {t("Add Invoice")}
       </Button>
       <Grid container spacing={2} style={{ marginTop: "16px" }}>
-        {invoices.map((invoice) => (
+        {filteredInvoices.map((invoice) => (
           <Grid item xs={12} md={6} lg={4} key={invoice.id}>
             <Card>
               <CardContent>
                 <Typography variant="h6">{invoice.customer_name}</Typography>
-                <Typography>Contact: {invoice.contact_number}</Typography>
-                <Typography>Item: {invoice.item}</Typography>
-                <Typography>Quantity: {invoice.quantity}</Typography>
-                <Typography>Price: {invoice.price_per_item}</Typography>
-                <Typography>Shipping: {invoice.shipping}</Typography>
-                <Typography>Total: {invoice.total}</Typography>
-                <Typography>Grand Total: {invoice.grand_total}</Typography>
+                <Typography>
+                  {t("Contact")}: {invoice.contact_number}
+                </Typography>
+                <Typography>
+                  {t("Item")}: {invoice.item}
+                </Typography>
+                <Typography>
+                  {t("Quantity")}: {invoice.quantity}
+                </Typography>
+                <Typography>
+                  {t("Price")}: {invoice.price_per_item}
+                </Typography>
+                <Typography>
+                  {t("Shipping")}: {invoice.shipping}
+                </Typography>
+                <Typography>
+                  {t("Total")}: {invoice.total}
+                </Typography>
+                <Typography>
+                  {t("Grand Total")}: {invoice.grand_total}
+                </Typography>
+
+                {/* 🆕 Download PDF Button */}
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  style={{ marginTop: "8px", marginRight: "8px" }}
+                  onClick={() =>
+                    window.open(
+                      `http://127.0.0.1:8000/invoice/pdf/${invoice.id}/`,
+                      "_blank"
+                    )
+                  }
+                >
+                  {t("Download Pdf")}
+                </Button>
+
                 <IconButton onClick={() => handleOpen(invoice)}>
                   <Edit />
                 </IconButton>

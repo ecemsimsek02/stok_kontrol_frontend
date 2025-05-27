@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -18,6 +19,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
 const VendorsPage = () => {
+  const { t, i18n } = useTranslation();
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newVendor, setNewVendor] = useState({
@@ -131,8 +133,10 @@ const VendorsPage = () => {
   return (
     <Box p={4}>
       <Card>
+        <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+        <button onClick={() => i18n.changeLanguage("en")}>English</button>
         <CardHeader
-          title={<Typography variant="h5">Vendor Yönetimi</Typography>}
+          title={<Typography variant="h5">{t("Satıcı Listesi")}</Typography>}
           action={
             <Button
               type="submit"
@@ -148,7 +152,7 @@ const VendorsPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="Ad"
+                label={t("Ad")}
                 name="name"
                 value={newVendor.name}
                 onChange={handleInputChange}
@@ -158,7 +162,7 @@ const VendorsPage = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="Adres"
+                label={t("Adres")}
                 name="address"
                 value={newVendor.address}
                 onChange={handleInputChange}
@@ -167,7 +171,7 @@ const VendorsPage = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="Telefon"
+                label={t("Telefon")}
                 name="phone_number"
                 value={newVendor.phone_number}
                 onChange={handleInputChange}
@@ -205,10 +209,10 @@ const VendorsPage = () => {
                   </Box>
                 </Box>
                 <Typography variant="body2" color="textSecondary">
-                  Adres: {vendor.address || "N/A"}
+                  {t("Adres")}: {vendor.address || "N/A"}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Telefon: {vendor.phone_number || "N/A"}
+                  {t("Telefon")}: {vendor.phone_number || "N/A"}
                 </Typography>
               </CardContent>
             </Card>

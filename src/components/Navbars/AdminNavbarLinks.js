@@ -21,12 +21,13 @@ import Button from "components/CustomButtons/Button.js";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
-
+//import { Bell } from "lucide-react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import NotificationsIcon from "@material-ui/icons/Notifications";
 const useStyles = makeStyles(styles);
-
 export default function AdminNavbarLinks() {
+  const [taskNotifications, setTaskNotifications] = React.useState([]);
   const navigate = useNavigate();
   const classes = useStyles();
   const [openProfileAnchor, setOpenProfileAnchor] = React.useState(null);
@@ -62,12 +63,96 @@ export default function AdminNavbarLinks() {
     navigate("/admin/dashboard");
   };
 
+  const [alerts, setAlerts] = React.useState([]);
+  const [openAlertBox, setOpenAlertBox] = React.useState(false);
+
+  React.useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/stocks/api/stock-alerts/",
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        setAlerts(response.data.alerts);
+      } catch (error) {
+        console.error("Uyarılar alınamadı:", error);
+      }
+    };
+    fetchAlerts();
+    const storedTaskNotifications = localStorage.getItem("taskNotifications");
+    if (storedTaskNotifications) {
+      try {
+        setTaskNotifications(JSON.parse(storedTaskNotifications));
+      } catch {
+        setTaskNotifications([]);
+      }
+    }
+  }, []);
+
   return (
     <div
       className={classes.manager}
       style={{ display: "flex", alignItems: "center", gap: "10px" }}
     >
-      {/* Dashboard Button */}
+      {/* Zil Simgesi */}
+      <div style={{ position: "relative" }}>
+        <NotificationsIcon
+          style={{
+            cursor: "pointer",
+            color: alerts.length > 0 ? "red" : "gray",
+          }}
+          onClick={() => setOpenAlertBox(!openAlertBox)}
+        />
+        {openAlertBox && (
+          <div
+            style={{
+              position: "absolute",
+              top: "30px",
+              right: 0,
+              background: "white",
+              border: "1px solid #ccc",
+              borderRadius: "10px",
+              padding: "10px",
+              width: "250px",
+              zIndex: 10,
+              boxShadow: "0px 2px 5px rgba(0,0,0,0.2)",
+            }}
+          >
+            <strong>Görev Bildirimleri</strong>
+            <Divider style={{ margin: "5px 0" }} />
+            {taskNotifications.length === 0 ? (
+              <p style={{ fontSize: "14px" }}>Bildirim yok</p>
+            ) : (
+              taskNotifications.map((note) => (
+                <p key={note.id} style={{ fontSize: "14px", margin: "5px 0" }}>
+                  {note.message}
+                </p>
+              ))
+            )}
+
+            {/* İstersen stok uyarılarını da aynı kutuda göstermek için altına ekleyebilirsin */}
+            {alerts.length > 0 && (
+              <>
+                <Divider style={{ margin: "10px 0" }} />
+                <strong>Stok Uyarıları</strong>
+                <Divider style={{ margin: "5px 0" }} />
+                {alerts.map((alert, idx) => (
+                  <p key={idx} style={{ fontSize: "14px", margin: "5px 0" }}>
+                    {alert}
+                  </p>
+                ))}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Dashboard ve Profil Butonları */}
       <Button
         color={isMdUp ? "transparent" : "white"}
         justIcon={isMdUp}
@@ -78,6 +163,7 @@ export default function AdminNavbarLinks() {
         <DashboardIcon className={classes.icons} />
         {!isMdUp && <p className={classes.linkText}>Dashboard</p>}
       </Button>
+
       <Button
         color={isMdUp ? "transparent" : "white"}
         justIcon={isMdUp}

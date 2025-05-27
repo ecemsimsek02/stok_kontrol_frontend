@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -15,6 +16,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import CheckIcon from "@material-ui/icons/Check";
 
 const DeliveriesPage = () => {
+  const { t, i18n } = useTranslation();
   const [deliveries, setDeliveries] = useState([]);
   //const [items, setItems] = useState([]);
   const [formData, setFormData] = useState({
@@ -150,13 +152,15 @@ const DeliveriesPage = () => {
 
   return (
     <Card>
+      <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+      <button onClick={() => i18n.changeLanguage("en")}>English</button>
       <CardContent>
-        <Typography variant="h5">Teslimat Yönetimi</Typography>
+        <Typography variant="h5">{t("Teslimat Yönetimi")}</Typography>
         <Grid container spacing={2} sx={{ my: 2 }}>
           <Grid item xs={12} sm={6} md={4}>
             <TextField
               fullWidth
-              label="Ürün"
+              label={t("Ürün")}
               name="item"
               value={formData.item}
               onChange={handleChange}
@@ -184,7 +188,7 @@ const DeliveriesPage = () => {
         </Button>
 
         <Typography variant="h6" sx={{ mt: 4 }}>
-          Teslimatlar
+          {t("Teslimatlar")}
         </Typography>
         {deliveries.map((delivery) => (
           <Card key={delivery.id} sx={{ my: 1, p: 2 }}>
@@ -195,8 +199,8 @@ const DeliveriesPage = () => {
                   {delivery.location})
                 </Typography>
                 <Typography variant="body2">
-                  Ürün ID: {delivery.item} | Tarih:{" "}
-                  {delivery.date?.split("T")[0]} | Durum:{" "}
+                  {t("Ürün")} ID: {delivery.item} | {t("Tarih")}:{" "}
+                  {delivery.date?.split("T")[0]} | {t("Durum")}:{" "}
                   {delivery.is_delivered ? "Teslim edildi" : "Bekliyor"}
                 </Typography>
               </Grid>

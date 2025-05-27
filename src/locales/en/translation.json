@@ -1,0 +1,30 @@
+{
+  "welcome": "Welcome",
+  "Invoices": "Invoices",
+  "download_pdf": "Download PDF",
+  "Profili Güncelle": "UpdateProfile",
+  "Ad":"First Name",
+  "Soyad":"Last Name",
+  "Telefon":"Telephone",
+  "Rol":"Role",
+  "Durum":"Status",
+  "Sil":"Delete",
+  "Profiller":"Profiles",
+  "Müşteri Listesi":"Customer List",
+  "Adres":"Address",
+  "Puan":"Point",
+  "Güncelle":"Update",
+  "Sadakat Puanı":"Loyalty Points",
+  "Satıcı Listesi":"Vendor Lists",
+  "Ürün Yönetimi":"Item List",
+  "Açıklama":"Description",
+  "Kategori":"Category",
+  "Adet":"Quantity",
+  "Teslimat Yönetimi":"Delivery Managment",
+  "Ürün":"Item",
+  "Teslimatlar":"Deliveries",
+  "Tarih":"Date"
+  
+
+
+}

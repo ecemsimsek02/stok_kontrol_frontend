@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardHeader,
@@ -15,6 +16,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import "./ProfilePage.css";
 
 function ProfilePage() {
+  const { t, i18n } = useTranslation();
   const [profiles, setProfiles] = useState([]);
   const [newProfile, setNewProfile] = useState({
     first_name: "",
@@ -76,37 +78,6 @@ function ProfilePage() {
     }
   };
 
-  /*const handleCreate = async () => {
-    const formData = new FormData();
-    formData.append("first_name", newProfile.first_name);
-    formData.append("last_name", newProfile.last_name);
-    formData.append("email", newProfile.email);
-    formData.append("telephone", newProfile.phone);
-    formData.append("role", newProfile.role);
-    formData.append("status", newProfile.status);
-    if (newProfile.profile_picture) {
-      formData.append("profile_picture", newProfile.profile_picture);
-    }
-
-    try {
-      await axios.post(
-        "http://127.0.0.1:8000/accounts/new-profile/",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      alert("Profil oluşturuldu");
-      resetForm();
-      fetchProfiles();
-    } catch (error) {
-      console.error("Oluşturma başarısız", error);
-    }
-  }; */
-
   const handleUpdate = async () => {
     if (!editingProfileId) return;
 
@@ -167,8 +138,10 @@ function ProfilePage() {
   };
   return (
     <Card>
+      <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+      <button onClick={() => i18n.changeLanguage("en")}>English</button>
       <CardHeader
-        title={<Typography variant="h4">Profiller</Typography>}
+        title={<Typography variant="h4">{t("Profiller")}</Typography>}
         action={
           editingProfileId && (
             <Button
@@ -177,7 +150,7 @@ function ProfilePage() {
               onClick={handleUpdate}
               startIcon={<EditIcon />}
             >
-              Profili Güncelle
+              {t("Profili Güncelle")}
             </Button>
           )
         }
@@ -186,14 +159,14 @@ function ProfilePage() {
         {/* PROFIL FORM */}
         <div className="profile-form-container">
           <TextField
-            label="Ad"
+            label={t("Ad")}
             value={newProfile.first_name}
             onChange={(e) =>
               setNewProfile({ ...newProfile, first_name: e.target.value })
             }
           />
           <TextField
-            label="Soyad"
+            label={t("Soyad")}
             value={newProfile.last_name}
             onChange={(e) =>
               setNewProfile({ ...newProfile, last_name: e.target.value })
@@ -207,21 +180,21 @@ function ProfilePage() {
             }
           />
           <TextField
-            label="Telefon"
+            label={t("Telefon")}
             value={newProfile.phone}
             onChange={(e) =>
               setNewProfile({ ...newProfile, phone: e.target.value })
             }
           />
           <TextField
-            label="Rol"
+            label={t("Rol")}
             value={newProfile.role}
             onChange={(e) =>
               setNewProfile({ ...newProfile, role: e.target.value })
             }
           />
           <TextField
-            label="Durum"
+            label={t("Durum")}
             value={newProfile.status}
             onChange={(e) =>
               setNewProfile({ ...newProfile, status: e.target.value })
@@ -256,9 +229,15 @@ function ProfilePage() {
                     {profile.first_name} {profile.last_name}
                   </Typography>
                   <Typography>Email: {profile.email || "N/A"}</Typography>
-                  <Typography>Telefon: {profile.telephone || "N/A"}</Typography>
-                  <Typography>Rol: {profile.role || "N/A"}</Typography>
-                  <Typography>Durum: {profile.status || "N/A"}</Typography>
+                  <Typography>
+                    {t("Telefon")}: {profile.telephone || "N/A"}
+                  </Typography>
+                  <Typography>
+                    {t("Rol")}: {profile.role || "N/A"}
+                  </Typography>
+                  <Typography>
+                    {t("Durum")}: {profile.status || "N/A"}
+                  </Typography>
                 </div>
                 <div className="profile-actions">
                   <IconButton
@@ -276,7 +255,7 @@ function ProfilePage() {
                       handleDelete();
                     }}
                   >
-                    Sil
+                    {t("Sil")}
                   </Button>
                 </div>
               </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Typography,
   Button,
@@ -31,6 +32,7 @@ const getUserRole = () => {
 };
 
 const CashboxPage = () => {
+  const { t, i18n } = useTranslation();
   const [transactions, setTransactions] = useState([]);
   const [cashRegisters, setCashRegisters] = useState([]);
   const [open, setOpen] = useState(false);
@@ -46,6 +48,8 @@ const CashboxPage = () => {
     amount: "",
     transaction_type: "IN",
     description: "",
+    customer: "",
+    company: "",
   });
 
   const API_URL = "http://127.0.0.1:8000/cash/transactions/";
@@ -117,10 +121,12 @@ const CashboxPage = () => {
   const handleOpen = () => {
     setFormData({
       id: null,
-      cash_register: cashRegisters[0]?.id || "",
+      cash_register: cashRegisters.length > 0 ? cashRegisters[0].id : "",
       amount: "",
-      transaction_type: "IN",
+      transaction_type: "",
+      customer: "",
       description: "",
+      company: "",
     });
     setOpen(true);
   };
@@ -150,6 +156,8 @@ const CashboxPage = () => {
       amount: parseFloat(formData.amount),
       transaction_type: formData.transaction_type,
       description: formData.description,
+      customer: formData.transaction_type === "IN" ? formData.customer : "",
+      company: formData.company,
     };
 
     try {
@@ -167,7 +175,7 @@ const CashboxPage = () => {
         });
       }
       fetchTransactions();
-      fetchCashRegisters(); // Balance güncellendiği için tekrar getir
+      fetchCashRegisters();
       handleClose();
     } catch (error) {
       console.error("Kayıt işlemi başarısız", error);
@@ -195,9 +203,12 @@ const CashboxPage = () => {
       amount: tx.amount,
       transaction_type: tx.transaction_type,
       description: tx.description,
+      customer: tx.customer || "",
+      company: tx.company || "",
     });
     setOpen(true);
   };
+
   if (role !== "AD") {
     return (
       <div style={{ padding: 20 }}>
@@ -209,14 +220,16 @@ const CashboxPage = () => {
   }
   return (
     <div>
-      <Typography variant="h4">Cash Transactions</Typography>
+      <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+      <button onClick={() => i18n.changeLanguage("en")}>English</button>
+      <Typography variant="h4">{t("Cash Transactions")}</Typography>
       <Button
         variant="contained"
         color="primary"
         onClick={handleOpen}
         style={{ marginTop: 10 }}
       >
-        Add Transaction
+        {t("Add Transactions")}
       </Button>
 
       <Grid container spacing={2} style={{ marginTop: 16 }}>
@@ -225,12 +238,26 @@ const CashboxPage = () => {
             <Card>
               <CardContent>
                 <Typography variant="h6">
-                  {tx.transaction_type === "IN" ? "Cash In" : "Cash Out"} -{" "}
+                  {tx.transaction_type === "IN" ? "Kasa Giriş" : "Kasa Çıkış"} -{" "}
                   {tx.amount} TL
                 </Typography>
                 <Typography>{tx.description}</Typography>
                 <Typography>
-                  Date: {new Date(tx.created_at).toLocaleString()}
+                  {t("Date")}: {new Date(tx.created_at).toLocaleString()}
+                </Typography>
+                {tx.customer && (
+                  <Typography>
+                    {t("Customer")}: {tx.customer}
+                  </Typography>
+                )}
+                {tx.company && (
+                  <Typography>
+                    {t("Company")}: {tx.company}
+                  </Typography>
+                )}
+
+                <Typography variant="body2" color="textSecondary">
+                  {t("Added by")}: {tx.added_by}
                 </Typography>
                 <div style={{ marginTop: 8 }}>
                   <IconButton onClick={() => handleEdit(tx)}>
@@ -246,7 +273,7 @@ const CashboxPage = () => {
         ))}
       </Grid>
       <Typography variant="h5" style={{ marginTop: 32 }}>
-        Cash Registers
+        {t("Cash Registers")}
       </Typography>
       <Button
         variant="contained"
@@ -254,7 +281,7 @@ const CashboxPage = () => {
         onClick={() => setOpenRegisterDialog(true)}
         style={{ marginTop: 10 }}
       >
-        Yeni Cash Register
+        {t("New Cash Registers")}
       </Button>
       <Grid container spacing={2} style={{ marginTop: 8 }}>
         {cashRegisters.map((reg) => (
@@ -262,20 +289,20 @@ const CashboxPage = () => {
             <Card>
               <CardContent>
                 <Typography variant="h6">
-                  Date: {new Date(reg.date).toLocaleDateString()}
+                  {t("Date")}: {new Date(reg.date).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body1">
-                  Balance: {reg.balance} TL
+                  {t("Balance")}: {reg.balance} TL
                 </Typography>
               </CardContent>
             </Card>
             <Card>
               <CardContent>
                 <Typography variant="h6">
-                  Date: {new Date(reg.date).toLocaleDateString()}
+                  {t("Date")}: {new Date(reg.date).toLocaleDateString()}
                 </Typography>
                 <Typography variant="body1">
-                  Balance: {reg.balance} TL
+                  {t("Balance")}: {reg.balance} TL
                 </Typography>
                 <div style={{ marginTop: 8 }}>
                   <IconButton onClick={() => handleEditRegister(reg)}>
@@ -299,7 +326,7 @@ const CashboxPage = () => {
           <TextField
             select
             name="cash_register"
-            label="Cash Register"
+            label={t("Cash Register")}
             fullWidth
             margin="dense"
             value={formData.cash_register}
@@ -311,33 +338,59 @@ const CashboxPage = () => {
               </MenuItem>
             ))}
           </TextField>
+
           <TextField
             margin="dense"
             name="amount"
-            label="Amount"
+            label={t("Amount")}
             type="number"
             fullWidth
             value={formData.amount}
             onChange={handleChange}
           />
+
           <TextField
             select
             name="transaction_type"
-            label="Transaction Type"
+            label={t("Transaction Type")}
             fullWidth
             margin="dense"
             value={formData.transaction_type}
             onChange={handleChange}
           >
-            <MenuItem value="IN">Cash In</MenuItem>
-            <MenuItem value="OUT">Cash Out</MenuItem>
+            <MenuItem value="IN">{t("Cash in")} </MenuItem>
+            <MenuItem value="OUT">{t("Cash out")}</MenuItem>
           </TextField>
+
+          {/* Girişlerde müşteri bilgisi */}
+          {formData.transaction_type === "IN" && (
+            <TextField
+              margin="dense"
+              name="customer"
+              label={t("Customer (optional)")}
+              fullWidth
+              value={formData.customer}
+              onChange={handleChange}
+            />
+          )}
+
+          {/* Hem IN hem OUT'ta açıklama olabilir */}
           <TextField
             margin="dense"
             name="description"
-            label="Description"
+            label={t("Description")}
             fullWidth
             value={formData.description}
+            onChange={handleChange}
+          />
+
+          {/* Firma bilgisi her iki işlem türünde de opsiyonel */}
+          <TextField
+            margin="dense"
+            name="company"
+            label={t("Company (optional)")}
+            fullWidth
+            value={formData.company}
             onChange={handleChange}
           />
         </DialogContent>
@@ -352,10 +405,10 @@ const CashboxPage = () => {
         open={openRegisterDialog}
         onClose={() => setOpenRegisterDialog(false)}
       >
-        <DialogTitle>Yeni Cash Register</DialogTitle>
+        <DialogTitle>{t("New Cash Register")}</DialogTitle>
         <DialogContent>
           <TextField
-            label="Tarih"
+            label={t("Date")}
             type="date"
             name="date"
             fullWidth
@@ -391,7 +444,7 @@ const CashboxPage = () => {
               }
             }}
           >
-            Kaydet
+            {t("Save")}
           </Button>
         </DialogActions>
       </Dialog>
@@ -399,11 +452,11 @@ const CashboxPage = () => {
         open={editRegisterDialogOpen}
         onClose={() => setEditRegisterDialogOpen(false)}
       >
-        <DialogTitle>Update Cash Register</DialogTitle>
+        <DialogTitle>{t("Update Cash Register")}</DialogTitle>
         <DialogContent>
           <TextField
             margin="dense"
-            label="Balance"
+            label={t("Balance")}
             type="number"
             fullWidth
             value={editingRegister?.balance || ""}
@@ -417,7 +470,7 @@ const CashboxPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditRegisterDialogOpen(false)}>
-            Cancel
+            {t("Cancel")}
           </Button>
           <Button
             onClick={async () => {
@@ -438,7 +491,7 @@ const CashboxPage = () => {
               }
             }}
           >
-            Save
+            {t("Save")}
           </Button>
         </DialogActions>
       </Dialog>

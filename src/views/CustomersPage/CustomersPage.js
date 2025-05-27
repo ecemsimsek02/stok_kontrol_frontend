@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -10,6 +11,7 @@ import {
 } from "@material-ui/core";
 
 export default function CustomersPage() {
+  const { t, i18n } = useTranslation();
   const [customers, setCustomers] = useState([]);
   const [newCustomer, setNewCustomer] = useState({
     first_name: "",
@@ -157,8 +159,10 @@ export default function CustomersPage() {
 
   return (
     <div>
+      <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+      <button onClick={() => i18n.changeLanguage("en")}>English</button>
       <Typography variant="h4" gutterBottom>
-        Müşteri Listesi
+        {t("Müşteri Listesi")}
       </Typography>
       <Grid container spacing={2}>
         {customers.map((customer) => (
@@ -168,24 +172,32 @@ export default function CustomersPage() {
                 <Typography variant="h6">
                   {customer.full_name || "Ad Soyad Yok"}
                 </Typography>
-                <Typography>Email: {customer.email || "Yok"}</Typography>
-                <Typography>Telefon: {customer.phone || "Yok"}</Typography>
-                <Typography>Adres: {customer.address || "Yok"}</Typography>
-                <Typography>Puan: {customer.loyalty_points}</Typography>
+                <Typography>
+                  {t("Email")}: {customer.email || "Yok"}
+                </Typography>
+                <Typography>
+                  {t("Telefon")}: {customer.phone || "Yok"}
+                </Typography>
+                <Typography>
+                  {t("Adres")}: {customer.address || "Yok"}
+                </Typography>
+                <Typography>
+                  {t("Puan")}: {customer.loyalty_points}
+                </Typography>
                 <Button
                   variant="contained"
                   color="error"
                   onClick={() => handleDelete(customer.id)}
                   style={{ marginRight: "8px", marginTop: "10px" }}
                 >
-                  Sil
+                  {t("Sil")}
                 </Button>
                 <Button
                   variant="contained"
                   onClick={() => handleEdit(customer)}
                   style={{ marginTop: "10px" }}
                 >
-                  Güncelle
+                  {t("Güncelle")}
                 </Button>
               </CardContent>
             </Card>
@@ -200,7 +212,7 @@ export default function CustomersPage() {
         <Grid item xs={12} sm={3}>
           <TextField
             fullWidth
-            label="Ad"
+            label={t("Ad")}
             name="first_name"
             value={newCustomer.first_name}
             onChange={handleChange}
@@ -209,7 +221,7 @@ export default function CustomersPage() {
         <Grid item xs={12} sm={3}>
           <TextField
             fullWidth
-            label="Soyad"
+            label={t("Soyad")}
             name="last_name"
             value={newCustomer.last_name}
             onChange={handleChange}
@@ -227,7 +239,7 @@ export default function CustomersPage() {
         <Grid item xs={12} sm={3}>
           <TextField
             fullWidth
-            label="Telefon"
+            label={t("Telefon")}
             name="phone"
             value={newCustomer.phone}
             onChange={handleChange}
@@ -236,7 +248,7 @@ export default function CustomersPage() {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Adres"
+            label={t("Adres")}
             name="address"
             value={newCustomer.address}
             onChange={handleChange}
@@ -245,7 +257,7 @@ export default function CustomersPage() {
         <Grid item xs={12} sm={3}>
           <TextField
             fullWidth
-            label="Sadakat Puanı"
+            label={t("Sadakat Puanı")}
             name="loyalty_points"
             type="number"
             value={newCustomer.loyalty_points}

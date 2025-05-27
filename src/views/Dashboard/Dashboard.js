@@ -1,317 +1,103 @@
-/*import React from "react";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
-// @material-ui/core
-import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
-// @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
-import DateRange from "@material-ui/icons/DateRange";
-import LocalOffer from "@material-ui/icons/LocalOffer";
-import Update from "@material-ui/icons/Update";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
-import Accessibility from "@material-ui/icons/Accessibility";
-import BugReport from "@material-ui/icons/BugReport";
-import Code from "@material-ui/icons/Code";
-import Cloud from "@material-ui/icons/Cloud";
-// core components
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
-import Tasks from "components/Tasks/Tasks.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import Danger from "components/Typography/Danger.js";
-import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardIcon from "components/Card/CardIcon.js";
-import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-
-import { bugs, website, server } from "variables/general.js";
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Line } from 'react-chartjs-2';
-import { Card, CardContent, Typography } from '@material-ui/core';
-
-import {
-  dailySalesChart,
-  emailsSubscriptionChart,
-  completedTasksChart,
-} from "variables/charts.js";
-
-import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-
-const useStyles = makeStyles(styles);
-
-export default function Dashboard() {
-  const classes = useStyles();
-  return (
-    <div>
-      <GridContainer>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="warning" stats icon>
-              <CardIcon color="warning">
-                <Icon>content_copy</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Used Space</p>
-              <h3 className={classes.cardTitle}>
-                49/50 <small>GB</small>
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Danger>
-                  <Warning />
-                </Danger>
-                <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                  Get more space
-                </a>
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="success" stats icon>
-              <CardIcon color="success">
-                <Store />
-              </CardIcon>
-              <p className={classes.cardCategory}>Revenue</p>
-              <h3 className={classes.cardTitle}>$34,245</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <DateRange />
-                Last 24 Hours
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon color="danger">
-                <Icon>info_outline</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Fixed Issues</p>
-              <h3 className={classes.cardTitle}>75</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <LocalOffer />
-                Tracked from Github
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <Accessibility />
-              </CardIcon>
-              <p className={classes.cardCategory}>Followers</p>
-              <h3 className={classes.cardTitle}>+245</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="success">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today sales.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="warning">
-              <ChartistGraph
-                className="ct-chart"
-                data={emailsSubscriptionChart.data}
-                type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
-          <CustomTabs
-            title="Tasks:"
-            headerColor="primary"
-            tabs={[
-              {
-                tabName: "Bugs",
-                tabIcon: BugReport,
-                tabContent: (
-                  <Tasks
-                    checkedIndexes={[0, 3]}
-                    tasksIndexes={[0, 1, 2, 3]}
-                    tasks={bugs}
-                  />
-                ),
-              },
-              {
-                tabName: "Website",
-                tabIcon: Code,
-                tabContent: (
-                  <Tasks
-                    checkedIndexes={[0]}
-                    tasksIndexes={[0, 1]}
-                    tasks={website}
-                  />
-                ),
-              },
-              {
-                tabName: "Server",
-                tabIcon: Cloud,
-                tabContent: (
-                  <Tasks
-                    checkedIndexes={[1]}
-                    tasksIndexes={[0, 1, 2]}
-                    tasks={server}
-                  />
-                ),
-              },
-            ]}
-          />
-        </GridItem>
-        <GridItem xs={12} sm={12} md={6}>
-          <Card>
-            <CardHeader color="warning">
-              <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
-              <p className={classes.cardCategoryWhite}>
-                New employees on 15th September, 2016
-              </p>
-            </CardHeader>
-            <CardBody>
-              <Table
-                tableHeaderColor="warning"
-                tableHead={["ID", "Name", "Salary", "Country"]}
-                tableData={[
-                  ["1", "Dakota Rice", "$36,738", "Niger"],
-                  ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                  ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                  ["4", "Philip Chaney", "$38,735", "Korea, South"],
-                ]}
-              />
-            </CardBody>
-          </Card>
-        </GridItem>
-      </GridContainer>
-    </div>
-  );
-} */
 import React, { useEffect, useState } from "react";
 import {
-  Card,
-  CardContent,
-  IconButton,
-  TextField,
-  Button,
-} from "@material-ui/core";
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { Card, CardContent, IconButton } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import TaskPage from "../TaskPage/TaskPage.js";
 
 import { Typography, FormControlLabel } from "@material-ui/core";
 
 import { Checkbox } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import axios from "axios";
+//import { Badge } from "@material-ui/core";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import { Badge, Menu, MenuItem } from "@material-ui/core";
 
 function Dashboard() {
   const [materialData, setMaterialData] = useState([]);
   const [disinfectantData, setDisinfectantData] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [newTaskText, setNewTaskText] = useState("");
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [username, setUsername] = useState("");
+  //const [username, setUsername] = useState("");
   const [deliveries, setDeliveries] = useState([]);
+  //const [alerts, setAlerts] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const handleBellClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   useEffect(() => {
-    const savedTasks = localStorage.getItem("dashboardTasks");
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
+    if (token) {
+      fetchTransactions();
     }
-  }, []);
+  }, [token]);
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/cash/transactions/",
+        {
+          headers: { Authorization: `Token ${token}` },
+        }
+      );
+      setTransactions(response.data);
+    } catch (error) {
+      console.error("Transaction verisi alınamadı", error);
+    }
+    console.log("Transactions:", transactions);
+  };
+
+  // Cash in ve cash out toplamlarını hesapla
+  const totalCashIn = transactions
+    .filter((tx) => tx.transaction_type === "IN")
+    .reduce((acc, tx) => acc + parseFloat(tx.amount), 0);
+
+  const totalCashOut = transactions
+    .filter((tx) => tx.transaction_type === "OUT")
+    .reduce((acc, tx) => acc + parseFloat(tx.amount), 0);
+
+  const data = [
+    { name: "Cash In", value: parseFloat(totalCashIn) },
+    { name: "Cash Out", value: parseFloat(totalCashOut) },
+  ];
+  console.log("Cash In:", totalCashIn, "Cash Out:", totalCashOut);
+
+  const COLORS = ["#0088FE", "#FF8042"];
 
   useEffect(() => {
-    localStorage.setItem("dashboardTasks", JSON.stringify(tasks));
-  }, [tasks]);
+    const fetchNotifications = async () => {
+      try {
+        const res = await axios.get(
+          "http://127.0.0.1:8000/stocks/api/stock-alerts/",
+          authHeaders
+        );
+        if (Array.isArray(res.data.alerts)) {
+          setNotifications(res.data.alerts); // alerts dizisini doğrudan state'e koy
+        } else {
+          console.error("Beklenmeyen bildirim formatı:", res.data);
+          setNotifications([]);
+        }
+      } catch (err) {
+        console.error("Bildirimler alınamadı:", err);
+      }
+    };
+
+    if (token) {
+      fetchNotifications();
+    }
+  }, [token]);
 
   const token = localStorage.getItem("access_token");
   const authHeaders = {
@@ -343,7 +129,7 @@ function Dashboard() {
       }
     };
 
-    const fetchUser = async () => {
+    /*const fetchUser = async () => {
       try {
         const res = await axios.get(
           "http://127.0.0.1:8000/accounts/api/user/",
@@ -353,7 +139,7 @@ function Dashboard() {
       } catch (err) {
         console.error("Kullanıcı alınamadı", err);
       }
-    };
+    }; */
 
     const fetchDeliveries = async () => {
       try {
@@ -371,42 +157,10 @@ function Dashboard() {
     if (token) {
       fetchMaterials();
       fetchDisinfectants();
-      fetchUser();
+      //fetchUser();
       fetchDeliveries();
     }
   }, [token]);
-
-  const handleAddTask = () => {
-    if (!newTaskText.trim()) return;
-    if (editingIndex !== null) {
-      const updatedTasks = [...tasks];
-      updatedTasks[editingIndex].text = newTaskText;
-      setTasks(updatedTasks);
-      setEditingIndex(null);
-    } else {
-      setTasks([
-        ...tasks,
-        { text: newTaskText, completed: false, addedBy: username },
-      ]);
-    }
-    setNewTaskText("");
-  };
-
-  const handleDeleteTask = (index) => {
-    const updated = tasks.filter((_, i) => i !== index);
-    setTasks(updated);
-  };
-
-  const handleEditTask = (index) => {
-    setNewTaskText(tasks[index].text);
-    setEditingIndex(index);
-  };
-
-  const toggleComplete = (index) => {
-    const updated = [...tasks];
-    updated[index].completed = !updated[index].completed;
-    setTasks(updated);
-  };
 
   const handleMarkDelivered = async (id) => {
     try {
@@ -422,6 +176,69 @@ function Dashboard() {
 
   return (
     <Grid container spacing={2} padding={2}>
+      <Grid container spacing={2} padding={2}>
+        <Grid
+          item
+          xs={12}
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingRight: 20,
+          }}
+        >
+          <IconButton color="inherit" onClick={handleBellClick}>
+            <Badge badgeContent={notifications.length} color="secondary">
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            {notifications.length === 0 ? (
+              <MenuItem disabled>Hiç uyarı yok</MenuItem>
+            ) : (
+              notifications.map((alert, index) => (
+                <MenuItem key={index}>{alert}</MenuItem> // 👈 Sadece alert
+              ))
+            )}
+          </Menu>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Card style={{ height: 300 }}>
+          <CardContent>
+            <h3>Cash In vs Cash Out</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie
+                  data={data}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={80}
+                  paddingAngle={5}
+                  fill="#8884d8"
+                  label
+                >
+                  {data.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </Grid>
       {/* Material Stocks */}
       <Grid item xs={12} sm={6} md={3}>
         <Card style={{ height: 300 }}>
@@ -463,7 +280,7 @@ function Dashboard() {
         <Card>
           <CardContent>
             <Typography variant="h5" gutterBottom>
-              Beklenen Teslimatlar
+              Bekleyen Siparişler
             </Typography>
             {deliveries.length === 0 ? (
               <Typography variant="body2">
@@ -485,78 +302,9 @@ function Dashboard() {
           </CardContent>
         </Card>
       </Grid>
-
-      {/* Görevler */}
-      <Grid item xs={12} sm={6} md={3}>
-        <Card style={{ height: 300, overflowY: "auto" }}>
-          <CardContent>
-            <h4>Görevler</h4>
-            <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-              <TextField
-                fullWidth
-                size="small"
-                variant="outlined"
-                placeholder="Yeni görev"
-                value={newTaskText}
-                onChange={(e) => setNewTaskText(e.target.value)}
-              />
-              <Button
-                onClick={handleAddTask}
-                variant="contained"
-                color="primary"
-              >
-                {editingIndex !== null ? "Güncelle" : "Ekle"}
-              </Button>
-            </div>
-            {tasks.map((task, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: 6,
-                  padding: "4px 8px",
-                  backgroundColor: "#f5f5f5",
-                  borderRadius: 4,
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Checkbox
-                    checked={task.completed}
-                    onChange={() => toggleComplete(index)}
-                    color="primary"
-                  />
-                  <div
-                    style={{
-                      textDecoration: task.completed ? "line-through" : "none",
-                    }}
-                  >
-                    {task.text}{" "}
-                    <span style={{ fontSize: 12, color: "#777" }}>
-                      – {task.addedBy} tarafından eklendi
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleEditTask(index)}
-                  >
-                    <Edit fontSize="small" />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={() => handleDeleteTask(index)}
-                  >
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </Grid>
+      <div className="mt-8">
+        <TaskPage />
+      </div>
     </Grid>
   );
 }

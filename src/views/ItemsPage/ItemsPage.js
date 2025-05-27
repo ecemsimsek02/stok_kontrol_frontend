@@ -1,6 +1,7 @@
 // src/views/ItemsPage/ItemsPage.js
 
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import axios from "axios";
 import {
   Card,
@@ -20,6 +21,7 @@ import EditIcon from "@material-ui/icons/Edit";
 
 const ItemsPage = () => {
   const [items, setItems] = useState([]);
+  const { t, i18n } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newItem, setNewItem] = useState({
@@ -146,8 +148,10 @@ const ItemsPage = () => {
   return (
     <Box p={4}>
       <Card>
+        <button onClick={() => i18n.changeLanguage("tr")}>Türkçe</button>
+        <button onClick={() => i18n.changeLanguage("en")}>English</button>
         <CardHeader
-          title={<Typography variant="h5">Item Yönetimi</Typography>}
+          title={<Typography variant="h5">{t("Ürün Yönetimi")}</Typography>}
           action={
             <Button
               type="submit"
@@ -163,7 +167,7 @@ const ItemsPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="İsim"
+                label={t("Ad")}
                 name="name"
                 value={newItem.name}
                 onChange={handleInputChange}
@@ -173,7 +177,7 @@ const ItemsPage = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="Açıklama"
+                label={t("Açıklama")}
                 name="description"
                 value={newItem.description}
                 onChange={handleInputChange}
@@ -183,7 +187,7 @@ const ItemsPage = () => {
             <Grid item xs={12} sm={4}>
               <TextField
                 select
-                label="Kategori"
+                label={t("Kategori")}
                 name="category"
                 value={newItem.category}
                 onChange={handleInputChange}
@@ -198,7 +202,7 @@ const ItemsPage = () => {
             </Grid>
             <Grid item xs={12} sm={4}>
               <TextField
-                label="Adet"
+                label={t("Adet")}
                 name="quantity"
                 type="number"
                 value={newItem.quantity}
@@ -237,13 +241,13 @@ const ItemsPage = () => {
                   </Box>
                 </Box>
                 <Typography variant="body2" color="textSecondary">
-                  Açıklama: {item.description || "Yok"}
+                  {t("Açıklama")}: {item.description || "Yok"}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Kategori ID: {item.category}
+                  {t("Kategori")} ID: {item.category}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Adet: {item.quantity}
+                  {t("Adet")}: {item.quantity}
                 </Typography>
               </CardContent>
             </Card>

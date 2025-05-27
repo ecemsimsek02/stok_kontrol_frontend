@@ -22,6 +22,7 @@ const DisinfectantPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     quantity_in_stock: 0,
+    min_stock_level: "",
   });
   /*const [productionData, setProductionData] = useState({
     disinfectant_id: "",
@@ -77,7 +78,7 @@ const DisinfectantPage = () => {
           authHeaders
         );
       }
-      setFormData({ name: "", quantity_in_stock: 0 });
+      setFormData({ name: "", quantity_in_stock: 0, min_stock_level: "" });
       fetchDisinfectants();
     } catch (err) {
       console.error("Kayıt hatası:", err);
@@ -89,6 +90,7 @@ const DisinfectantPage = () => {
     setFormData({
       name: disinfectant.name,
       quantity_in_stock: disinfectant.quantity_in_stock,
+      min_stock_level: disinfectant.min_stock_level,
     });
   };
 
@@ -155,6 +157,14 @@ const DisinfectantPage = () => {
               value={formData.quantity_in_stock}
               onChange={handleChange}
             />
+            <TextField
+              fullWidth
+              name="min_stock_level"
+              label="Minimum Stok Seviyesi"
+              type="number"
+              value={formData.min_stock_level}
+              onChange={handleChange}
+            />
           </Grid>
         </Grid>
 
@@ -178,6 +188,9 @@ const DisinfectantPage = () => {
                 <Typography>{d.name}</Typography>
                 <Typography variant="body2">
                   Stok: {d.quantity_in_stock} L
+                </Typography>
+                <Typography variant="body2">
+                  Minimum Stok Seviyesi: {d.min_stock_level} L
                 </Typography>
               </Grid>
               <Grid item>
